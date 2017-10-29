@@ -30,51 +30,55 @@ Gui::Gui(){
 
 void Gui::updateContents(int winNum, string data){
   if(winNum > 0 ){
-  WINDOW * win = windows[winNum - 1];
-  int y,x,dataHeight;
-  getmaxyx(win,y,x);
-  dataHeight = 3*(LINES/4);
-  string clear;
-  for(int i=2;i<x;i++){
-    clear.push_back(' ');
+    WINDOW * win = windows[winNum - 1];
+    int y,x,dataHeight;
+    getmaxyx(win,y,x);
+    dataHeight = 3*(LINES/4);
+    string clear;
+    for(int i=2;i<x;i++){
+      clear.push_back(' ');
+    }
+    mvwprintw(win,LINES/2,1,clear.c_str());
+    mvwprintw(win,LINES/2,(x-data.size())/2,data.c_str() );
+    wrefresh(win);
   }
-  mvwprintw(win,LINES/2,1,clear.c_str());
-  mvwprintw(win,LINES/2,(x-data.size())/2,data.c_str() );
-  wrefresh(win);
-}
 }
 
 void Gui::updateContents(int winNum, double data){
   if(winNum > 0){
-  WINDOW * win = windows[winNum - 1];
-  int y,x,dataHeight;
-  string input;
-  input = to_string(data);
-  getmaxyx(win,y,x);
-  dataHeight = 3*(LINES/4);
-  string clear;
-  for(int i=2;i<x;i++){
-    clear.push_back(' ');
+    WINDOW * win = windows[winNum - 1];
+    int y,x,dataHeight;
+    string input;
+    input = to_string(data);
+    getmaxyx(win,y,x);
+    dataHeight = 3*(LINES/4);
+    string clear;
+    for(int i=2;i<x;i++){
+      clear.push_back(' ');
+    }
+    mvwprintw(win,LINES/2,1,clear.c_str());
+    mvwprintw(win,LINES/2,(x-input.size())/2,input.c_str() );
+    wrefresh(win);
   }
-  mvwprintw(win,LINES/2,1,clear.c_str());
-  mvwprintw(win,LINES/2,(x-input.size())/2,input.c_str() );
-  wrefresh(win);
-}}
+}
 
 void Gui::updateHeader(int winNum, string header){
   if(winNum > 0){
-  WINDOW * win = windows[winNum + 1];
-  int y,x,headerHeight;
-  getmaxyx(win,y,x);
-  headerHeight = LINES/4;
-  string line;
-  for(int i=2;i<x;i++){
-    line.push_back('-');
+    WINDOW * win = windows[winNum - 1];
+    int y,x,headerHeight;
+    getmaxyx(win,y,x);
+    headerHeight = LINES/4;
+    string line,clear;
+    for(int i=2;i<x;i++){
+      clear.push_back(' ');
+      line.push_back('-');
+    }
+    mvwprintw(win,headerHeight - 1,1,clear.c_str());
+    mvwprintw(win,headerHeight,1,line.c_str());
+    mvwprintw(win,headerHeight - LINES/8,(x-header.size())/2,header.c_str());
+    wrefresh(win);
   }
-  mvwprintw(win,headerHeight,1,line.c_str());
-  mvwprintw(win,headerHeight - LINES/8,(x-header.size())/2,header.c_str());
-  wrefresh(win);
-}}
+}
 
 void Gui::columns(int numColumns){
   int height = LINES;
