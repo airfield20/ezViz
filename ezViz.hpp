@@ -1,6 +1,8 @@
 #include <ncurses.h>
+#include <csignal>
 #include <vector>
 #include <string>
+#include <iostream>
 
 using namespace std;
 
@@ -10,11 +12,11 @@ public:
   ~Gui();
   void deleteWindow(WINDOW *local_win);
   void columns(int numColumns);
-  void updateHeader(WINDOW * win, string header);
-  void updateContents(WINDOW * win, string data);
-  void updateContents(WINDOW * win, double data);
+  void updateHeader(int winNum, string header);
+  void updateContents(int winNum, string data);
+  void updateContents(int winNum, double data);
 private:
-  WINDOW * newWindow(int height,int width, int starty, int startx);
+  WINDOW * newWindow(int height, int width, int starty, int startx);
   vector<WINDOW *> windows;
 };
 
@@ -22,10 +24,13 @@ Gui::Gui(){
   initscr(); // Start curses mode
   curs_set(0); // set Invisible cursor
   noecho(); //Don't echo back typed characters
+  // register signal SIGINT and signal handler
   cout.setstate(std::ios_base::failbit); //block couts
 }
 
-void Gui::updateContents(WINDOW * win, string data){
+void Gui::updateContents(int winNum, string data){
+  if(winNum >= 0 && winNum <= windows.size()){
+  WINDOW * win = windows[winNum - 1];
   int y,x,dataHeight;
   getmaxyx(win,y,x);
   dataHeight = 3*(LINES/4);
@@ -37,8 +42,11 @@ void Gui::updateContents(WINDOW * win, string data){
   mvwprintw(win,LINES/2,(x-data.size())/2,data.c_str() );
   wrefresh(win);
 }
+}
 
-void Gui::updateContents(WINDOW * win, double data){
+void Gui::updateContents(int winNum, double data){
+  if(winNum <= windows.size()){
+  WINDOW * win = windows[winNum - 1];
   int y,x,dataHeight;
   string input;
   input = to_string(data);
@@ -51,9 +59,11 @@ void Gui::updateContents(WINDOW * win, double data){
   mvwprintw(win,LINES/2,1,clear.c_str());
   mvwprintw(win,LINES/2,(x-input.size())/2,input.c_str() );
   wrefresh(win);
-}
+}}
 
-void Gui::updateHeader(WINDOW * win, string header){
+void Gui::updateHeader(int winNum, string header){
+  if(winNum <= windows.size()){
+  WINDOW * win = windows[winNum + 1];
   int y,x,headerHeight;
   getmaxyx(win,y,x);
   headerHeight = LINES/4;
@@ -64,7 +74,7 @@ void Gui::updateHeader(WINDOW * win, string header){
   mvwprintw(win,headerHeight,1,line.c_str());
   mvwprintw(win,headerHeight - LINES/8,(x-header.size())/2,header.c_str());
   wrefresh(win);
-}
+}}
 
 void Gui::columns(int numColumns){
   int height = LINES;
