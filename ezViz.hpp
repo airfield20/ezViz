@@ -8,20 +8,21 @@ class Gui{
 public:
   Gui();
   ~Gui();
-  WINDOW * newWindow(int height,int width, int starty, int startx);
-  vector<WINDOW *> windows;
   void deleteWindow(WINDOW *local_win);
   void columns(int numColumns);
   void updateHeader(WINDOW * win, string header);
   void updateContents(WINDOW * win, string data);
   void updateContents(WINDOW * win, double data);
+private:
+  WINDOW * newWindow(int height,int width, int starty, int startx);
+  vector<WINDOW *> windows;
 };
 
 Gui::Gui(){
-  initscr();
-  curs_set(0);
-  noecho();
-  cout.setstate(std::ios_base::failbit);
+  initscr(); // Start curses mode
+  curs_set(0); // set Invisible cursor
+  noecho(); //Don't echo back typed characters
+  cout.setstate(std::ios_base::failbit); //block couts
 }
 
 void Gui::updateContents(WINDOW * win, string data){
@@ -35,7 +36,6 @@ void Gui::updateContents(WINDOW * win, string data){
   mvwprintw(win,LINES/2,1,clear.c_str());
   mvwprintw(win,LINES/2,(x-data.size())/2,data.c_str() );
   wrefresh(win);
-
 }
 
 void Gui::updateContents(WINDOW * win, double data){
@@ -64,7 +64,6 @@ void Gui::updateHeader(WINDOW * win, string header){
   mvwprintw(win,headerHeight,1,line.c_str());
   mvwprintw(win,headerHeight - LINES/8,(x-header.size())/2,header.c_str());
   wrefresh(win);
-
 }
 
 void Gui::columns(int numColumns){
@@ -78,7 +77,7 @@ void Gui::columns(int numColumns){
   }
 }
 
-WINDOW * Gui::newWindow(int height, int width, int starty, int startx){
+WINDOW * Gui::newWindow(int height, int width, int starty, int startx){ //section off a portion of the screen to write specific data. Window will be bordered
   WINDOW *local_win;
 	local_win = newwin(height, width, starty, startx); //creates new window struct
 	box(local_win, 0 , 0); //draws box around window 0,0 mean use default horizontal and vertical line characters
@@ -86,7 +85,7 @@ WINDOW * Gui::newWindow(int height, int width, int starty, int startx){
 	return local_win; //return pointer to new window struct you created
 }
 
-void Gui::deleteWindow(WINDOW *local_win){
+void Gui::deleteWindow(WINDOW *local_win){ //remove one of the windows
 	wborder(local_win, ' ', ' ', ' ',' ',' ',' ',' ',' '); // erase the border from the screen
 	wrefresh(local_win); //refresh the screen
 	delwin(local_win); //deallocate the memory use to hold the window struct
