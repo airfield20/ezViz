@@ -29,7 +29,7 @@ Gui::Gui(){
 }
 
 void Gui::updateContents(int winNum, string data){
-  if(winNum >= 0 && winNum <= windows.size()){
+  if(winNum > 0 ){
   WINDOW * win = windows[winNum - 1];
   int y,x,dataHeight;
   getmaxyx(win,y,x);
@@ -45,7 +45,7 @@ void Gui::updateContents(int winNum, string data){
 }
 
 void Gui::updateContents(int winNum, double data){
-  if(winNum <= windows.size()){
+  if(winNum > 0){
   WINDOW * win = windows[winNum - 1];
   int y,x,dataHeight;
   string input;
@@ -62,7 +62,7 @@ void Gui::updateContents(int winNum, double data){
 }}
 
 void Gui::updateHeader(int winNum, string header){
-  if(winNum <= windows.size()){
+  if(winNum > 0){
   WINDOW * win = windows[winNum + 1];
   int y,x,headerHeight;
   getmaxyx(win,y,x);
