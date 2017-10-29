@@ -1,0 +1,2 @@
+# ezViz
+ncurses visualization tool
