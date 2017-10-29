@@ -1,1 +1,0 @@
-/usr/bin/c++      CMakeFiles/columns.dir/main.o  -o columns -rdynamic -lcurses -lform 
